@@ -23,6 +23,11 @@ if [ "$1" = "fluentd" ]; then
     if ! echo $@ | grep ' \-p' ; then
        set -- "$@" -p /fluentd/plugins
     fi
+
+    if ! echo $@ | grep ' \-r' ; then
+       SIMPLE_SNIFFER=$( gem contents fluent-plugin-elasticsearch | grep elasticsearch_simple_sniffer.rb )
+       set -- "$@" -r $SIMPLE_SNIFFER
+    fi
 fi
 
 exec "$@"

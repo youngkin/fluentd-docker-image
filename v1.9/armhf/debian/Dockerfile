@@ -29,11 +29,26 @@ RUN apt-get update \
     " \
  && apt-get install -y --no-install-recommends $buildDeps \
  && echo 'gem: --no-document' >> /etc/gemrc \
+ && gem install fluent-plugin-multi-format-parser -v 1.0.0 \
+ && gem install fluent-plugin-concat -v 2.4.0 \
+ && gem install fluent-plugin-grok-parser -v 2.6.0 \
+ && gem install fluent-plugin-prometheus -v 1.6.1 \
+ && gem install fluent-plugin-json-in-json-2 -v 1.0.2 \
+ && gem install fluent-plugin-record-modifier -v 2.0.0 \
+ && gem install fluent-plugin-detect-exceptions -v 0.0.12 \
+ && gem install fluent-plugin-rewrite-tag-filter -v 2.2.0 \
  && gem install oj -v 3.8.1 \
  && gem install json -v 2.3.0 \
  && gem install async-http -v 0.50.0 \
  && gem install ext_monitor -v 0.1.2 \
  && gem install fluentd -v 1.9.2 \
+ && gem install fluent-plugin-elasticsearch -v 4.0.4 \
+ && gem install elasticsearch -v 7.0 \
+ && gem install elasticsearch-xpack -v 7.4.0 \
+ && gem install fluent-plugin-dedot_filter -v 1.0 \
+ && gem install fluent-plugin-kubernetes_metadata_filter -v 2.3.0 \
+ && gem install ffi \
+ && gem install fluent-plugin-systemd -v 1.0.1 \
  && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
  && wget -O /usr/local/bin/tini "https://github.com/krallin/tini/releases/download/v$TINI_VERSION/tini-$dpkgArch" \
  && wget -O /usr/local/bin/tini.asc "https://github.com/krallin/tini/releases/download/v$TINI_VERSION/tini-$dpkgArch.asc" \
@@ -70,7 +85,7 @@ ENV FLUENTD_CONF="fluent.conf"
 ENV LD_PRELOAD="/usr/lib/libjemalloc.so.2"
 EXPOSE 24224 5140
 
-USER fluent
+USER root
 ENTRYPOINT ["tini",  "--", "/bin/entrypoint.sh"]
 CMD ["fluentd"]
 
